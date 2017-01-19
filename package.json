@@ -1,0 +1,22 @@
+{
+  "name": "apoc",
+  "version": "1.0.0",
+  "description": "Dev Experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mikejrojas/apoc.git"
+  },
+  "author": "Mike",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikejrojas/apoc/issues"
+  },
+  "homepage": "https://github.com/mikejrojas/apoc#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
