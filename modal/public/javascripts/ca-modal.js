@@ -52,12 +52,14 @@
     function createModal(){
 
       var caModalCloseBtn = '<a class="ca-modal__close" data-modal="close"></a>';
+      var caModalContainer = '<div class="ca-modal__container"></div>';
       var caModal = document.createElement("div");
       var el;
 
       caModal.setAttribute("class", "ca-modal");
       document.body.appendChild(caModal);
       caModal.insertAdjacentHTML('afterbegin', caModalCloseBtn);
+      caModal.insertAdjacentHTML('beforeend', caModalContainer);
       el = document.querySelector('.ca-modal');
       fadeIn(el);
     }
