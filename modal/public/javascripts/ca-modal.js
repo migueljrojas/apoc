@@ -49,7 +49,7 @@
     /**
      * [createModal Creates modal markup, attaches it to the DOM showing it with a fade in animation]
      */
-    function createModal(){
+    function createModal(source){
 
       var caModalCloseBtn = '<a class="ca-modal__close" data-modal="close"></a>';
       var caModalContainer = '<div class="ca-modal__container"></div>';
@@ -61,10 +61,13 @@
       caModal.insertAdjacentHTML('afterbegin', caModalCloseBtn);
       caModal.insertAdjacentHTML('beforeend', caModalContainer);
       caModalInstance = document.querySelector('.ca-modal');
+
+      detectContentType(source, contentHandler);
+
       fadeIn(caModalInstance);
     }
 
-    function detectContentType(source) {
+    function detectContentType(source, callback) {
       var dataSource = String(source);
       var data = {};
 
@@ -92,10 +95,35 @@
 
       return data;
 
+      if( typeof callback === 'function' && callback() ){
+         callback(data);
+      };
     }
 
-    function contentHandler() {
+    function contentHandler(content) {
+      if ( content !== 'undefined' ){
 
+        var contentType = content.type;
+
+        switch (contentType){
+          case 'image':
+            console.log('Its an image');
+            break;
+
+          case 'video':
+            console.log('Its a video');
+            break;
+
+          case 'gallery':
+            console.log('Its a gallery');
+            break;
+
+          case 'document':
+            console.log('Its a document');
+            break;
+        }
+
+      }
     }
 
     /**
@@ -112,14 +140,15 @@
           console.log('You clicked a modal trigger');
 
           var modalTriggerState = trigger.getAttribute('data-modal');
-          var modalTriggerTarget = trigger.getAttribute('data-target');
+          var modalTriggerSource = trigger.getAttribute('data-source');
           var modal = document.querySelector('.ca-modal');
 
           if ( modalTriggerState === 'open' ) {
             if (!modal) {
-              createModal();
+              createModal(modalTriggerSource);
             } else {
               fadeIn(modal);
+              detectContentType(modalTriggerSource, contentHandler);
             }
           } else if ( modalTriggerState === 'close' ) {
             fadeOut(modal);

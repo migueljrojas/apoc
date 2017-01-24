@@ -3,9 +3,9 @@ extends layout
 block content
   h1 Modal experiment test
   
-  button.trigger(data-modal='open') Open modal
+  button.trigger(data-modal='open', data-source='http://assets.barcroftmedia.com.s3-website-eu-west-1.amazonaws.com/assets/images/recent-images-11.jpg') Open modal image
   
-  a.trigger(data-modal='open', data-source='collection()') Open modal anchor
+  a.trigger(data-modal='open', data-source='https://www.youtube.com/watch?v=Evb31p5vFs4') Open modal anchor video
   
   a.trigger Another type of anchor
     
