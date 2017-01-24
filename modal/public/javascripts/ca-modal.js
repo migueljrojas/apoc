@@ -72,15 +72,25 @@
 
         data.source = dataSource;
         data.type = 'image';
-        return data;
 
-      } else if (true) {
+      } else if ( dataSource.test('youtube') || dataSource.test('vimeo') ) {
 
+        data.source = dataSource;
+        data.type = 'video';
 
+      } else if ( dataSource.test('collection') ) {
+
+        data.source = dataSource;
+        data.type = 'gallery';
+
+      } else {
+
+        data.source = dataSource;
+        data.type = 'document';
 
       }
 
-
+      return data;
 
     }
 
