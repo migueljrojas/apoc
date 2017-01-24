@@ -2,6 +2,7 @@
     'use strict';
 
     var modalTriggers = document.querySelectorAll('[data-modal]');
+    var caModalContainer;
 
     /**
      * [fadeOut function to animate and hide a given element]
@@ -52,7 +53,7 @@
     function createModal(source){
 
       var caModalCloseBtn = '<a class="ca-modal__close" data-modal="close"></a>';
-      var caModalContainer = '<div class="ca-modal__container"></div>';
+      caModalContainer = '<div class="ca-modal__container"></div>';
       var caModal = document.createElement("div");
       var caModalInstance;
 
@@ -67,7 +68,7 @@
       fadeIn(caModalInstance);
     }
 
-    function detectContentType(source, callback) {
+    function detectContentType(source, handler) {
       var dataSource = String(source);
       var data = {};
 
@@ -76,12 +77,12 @@
         data.source = dataSource;
         data.type = 'image';
 
-      } else if ( dataSource.test('youtube') || dataSource.test('vimeo') ) {
+      } else if ( dataSource.toLowerCase().indexOf('youtube') >= 0 || dataSource.toLowerCase().indexOf('vimeo') >= 0 ) {
 
         data.source = dataSource;
         data.type = 'video';
 
-      } else if ( dataSource.test('collection') ) {
+      } else if ( dataSource.toLowerCase().indexOf('collection') >= 0 ) {
 
         data.source = dataSource;
         data.type = 'gallery';
@@ -93,25 +94,49 @@
 
       }
 
-      return data;
-
-      if( typeof callback === 'function' && callback() ){
-         callback(data);
+      if( typeof handler === 'function' && handler(data) ){
+         handler(data);
       };
+
+      return data;
     }
 
     function contentHandler(content) {
       if ( content !== 'undefined' ){
 
         var contentType = content.type;
+        var contentSrc = content.source;
 
         switch (contentType){
           case 'image':
-            console.log('Its an image');
+            htmlInjector('.ca-modal__container', imgConstructor(contentSrc));
             break;
 
           case 'video':
-            console.log('Its a video');
+
+            var videoType,
+                videoID;
+
+            if ( contentSrc.toLowerCase().indexOf('youtube') >= 0 ) {
+              videoType = 'youtube';
+
+              var videoID = contentSrc.split('v=')[1];
+              var amp = videoID.indexOf('&');
+              if(amp != -1) {
+                videoID = videoID.substring(0, amp);
+              }
+
+            } else if ( contentSrc.toLowerCase().indexOf('vimeo') >= 0 ) {
+              videoType = 'vimeo';
+
+              var videoID = contentSrc.split('.com/')[1];
+              var amp = videoID.indexOf('&');
+              if(amp != -1) {
+                videoID = videoID.substring(0, amp);
+              }
+            }
+
+            htmlInjector('.ca-modal__container', videoConstructor(videoType, videoID));
             break;
 
           case 'gallery':
@@ -122,8 +147,38 @@
             console.log('Its a document');
             break;
         }
-
       }
+    }
+
+    function htmlInjector(target, html) {
+      target = document.querySelector(target);
+      target.appendChild(html);
+    }
+
+    function imgConstructor(src) {
+      var img = document.createElement('img');
+      img.setAttribute("src", src);
+
+      return img;
+    }
+
+    function iframeConstructor(src) {
+      var iframe = document.createElement('iframe');
+      iframe.setAttribute("src", src);
+
+      return iframe;
+    }
+
+    function videoConstructor(type, id) {
+      var video = document.createElement('iframe');
+
+      if ( type === 'youtube' ){
+        video.setAttribute("src", 'https://www.youtube.com/embed/' + id);
+      } else if ( type === 'vimeo' ) {
+        video.setAttribute("src", 'https://player.vimeo.com/video/' + id);
+      }
+
+      return video;
     }
 
     /**
@@ -151,6 +206,9 @@
               detectContentType(modalTriggerSource, contentHandler);
             }
           } else if ( modalTriggerState === 'close' ) {
+            setTimeout(function(){
+              document.querySelector('.ca-modal__container').innerHTML = '';
+            }, 400);
             fadeOut(modal);
           }
         }
