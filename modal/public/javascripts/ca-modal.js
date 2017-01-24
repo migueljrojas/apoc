@@ -16,7 +16,7 @@
           setTimeout(function(){
             el.style.display = 'none';
             el.classList.add('is-hidden');
-          }, 500);
+          }, 300);
         } else {
           requestAnimationFrame(fade);
         }
@@ -54,33 +54,66 @@
       var caModalCloseBtn = '<a class="ca-modal__close" data-modal="close"></a>';
       var caModalContainer = '<div class="ca-modal__container"></div>';
       var caModal = document.createElement("div");
-      var el;
+      var caModalInstance;
 
       caModal.setAttribute("class", "ca-modal");
       document.body.appendChild(caModal);
       caModal.insertAdjacentHTML('afterbegin', caModalCloseBtn);
       caModal.insertAdjacentHTML('beforeend', caModalContainer);
-      el = document.querySelector('.ca-modal');
-      fadeIn(el);
+      caModalInstance = document.querySelector('.ca-modal');
+      fadeIn(caModalInstance);
+    }
+
+    function detectContentType(source) {
+      var dataSource = String(source);
+      var data = {};
+
+      if ( dataSource.endsWith('jpg') || dataSource.endsWith('png') ) {
+
+        data.source = dataSource;
+        data.type = 'image';
+        return data;
+
+      } else if (true) {
+
+
+
+      }
+
+
+
+    }
+
+    function contentHandler() {
+
     }
 
     /**
      * [modalSwitch Attaches a click event listener to the document and handles the modal show/hide ]
      */
     function modalSwitch() {
+      console.log('Page has modals');
+
       document.onclick = function(event) {
 
-        var modalTriggerState = event.target.getAttribute('data-modal');
-        var el = document.querySelector('.ca-modal');
+        var trigger = event.target;
 
-        if ( modalTriggerState === 'open' ) {
-          if (!el) {
-            createModal();
-          } else {
-            fadeIn(el);
+        if ( trigger.hasAttribute('data-modal') ) {
+          console.log('You clicked a modal trigger');
+
+          var modalTriggerState = trigger.getAttribute('data-modal');
+          var modalTriggerTarget = trigger.getAttribute('data-target');
+          var modal = document.querySelector('.ca-modal');
+
+          if ( modalTriggerState === 'open' ) {
+            if (!modal) {
+              createModal();
+            } else {
+              fadeIn(modal);
+            }
+          } else if ( modalTriggerState === 'close' ) {
+            fadeOut(modal);
           }
-        } else if ( modalTriggerState === 'close' ) {
-          fadeOut(el);
         }
       }
     }
