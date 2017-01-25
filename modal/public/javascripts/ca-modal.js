@@ -52,15 +52,13 @@
      */
     function createModal(source){
 
-      var caModalCloseBtn = '<a class="ca-modal__close" data-modal="close"></a>';
-      caModalContainer = '<div class="ca-modal__container"></div>';
+      caModalContainer = '<div class="ca-modal__container"><a class="ca-modal__close" data-modal="close"></a></div>';
       var caModal = document.createElement("div");
       var caModalInstance;
 
       caModal.setAttribute("class", "ca-modal");
       document.body.appendChild(caModal);
-      caModal.insertAdjacentHTML('afterbegin', caModalCloseBtn);
-      caModal.insertAdjacentHTML('beforeend', caModalContainer);
+      caModal.insertAdjacentHTML('afterbegin', caModalContainer);
       caModalInstance = document.querySelector('.ca-modal');
 
       detectContentType(source, contentHandler);
@@ -106,13 +104,23 @@
 
         var contentType = content.type;
         var contentSrc = content.source;
+        var containerClass = '.ca-modal__container';
+        var container = document.querySelector(containerClass);
 
         switch (contentType){
           case 'image':
-            htmlInjector('.ca-modal__container', imgConstructor(contentSrc));
+            if (container.classList.contains('--video')){
+              container.classList.remove('--video');
+            }
+
+            htmlInjector(containerClass, imgConstructor(contentSrc));
             break;
 
           case 'video':
+
+            if (!container.classList.contains('--video')) {
+              container.className += ' --video';
+            }
 
             var videoType,
                 videoID;
@@ -136,15 +144,23 @@
               }
             }
 
-            htmlInjector('.ca-modal__container', videoConstructor(videoType, videoID));
+            htmlInjector(containerClass, videoConstructor(videoType, videoID));
             break;
 
           case 'gallery':
+            if (container.classList.contains('--video')){
+              container.classList.remove('--video');
+            }
+
             console.log('Its a gallery');
             break;
 
           case 'document':
-            console.log('Its a document');
+            if (container.classList.contains('--video')){
+              container.classList.remove('--video');
+            }
+
+            htmlInjector(containerClass, iframeConstructor(contentSrc));
             break;
         }
       }
@@ -207,8 +223,11 @@
             }
           } else if ( modalTriggerState === 'close' ) {
             setTimeout(function(){
-              document.querySelector('.ca-modal__container').innerHTML = '';
-            }, 400);
+              var modalContainer = document.querySelector('.ca-modal__container');
+              while (modalContainer.childNodes.length > 1) {
+                  modalContainer.removeChild(modalContainer.lastChild);
+              }
+            }, 300);
             fadeOut(modal);
           }
         }
