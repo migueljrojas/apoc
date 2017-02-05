@@ -1,0 +1,19 @@
+$test: #990000;
+
+body {
+  padding: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: $test;
+}
+
+h1{
+  color:$test;
+}
+
+.reacted{
+    border: 1px solid #cccccc;
+    background: url("/newbg.png") no-repeat 10px 36px;
+}

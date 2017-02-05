@@ -1,0 +1,13 @@
+body {
+  padding: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+
+a {
+  color: #990000; }
+
+h1 {
+  color: #990000; }
+
+.reacted {
+  border: 1px solid #cccccc;
+  background: url("/newbg.png") no-repeat 10px 36px; }

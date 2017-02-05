@@ -4,14 +4,11 @@ var sass = require('gulp-sass');
 var stylesDir = 'public/stylesheets/'
 
 gulp.task('sass', function(){
-  return gulp.src(stylesDir + 'scss/style.scss')
+  return gulp.src(stylesDir + 'scss/styles.scss')
     .pipe(sass()) // Converts Sass to CSS with gulp-sass
     .pipe(gulp.dest(stylesDir))
-    .pipe(browserSync.reload({
-      stream: true
-    }))
 });
 
 gulp.task('watch', ['sass'], function(){
-  gulp.watch(stylesDir + 'scss/style.scss', ['sass']);
-})
+  gulp.watch(stylesDir + 'scss/styles.scss', ['sass']);
+});

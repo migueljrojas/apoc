@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1.shouldReact(data-newcontent="Testeando ando")= title
+  p Welcome to #{title}
+  
+  div#placeholder
+    img(src='', data-src="http://www.w3schools.com/css/img_fjords.jpg")
+  
+  div#menu
+    p Hello
+    p world!
